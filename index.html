@@ -40,6 +40,71 @@
   .script-font { font-family: 'Playwrite NZ', cursive; font-weight: 300; }
   .heading-font { font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
 
+  /* Waitlist form */
+  .waitlist-form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    max-width: 440px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .waitlist-form input[type="email"] {
+    flex: 1;
+    min-width: 220px;
+    padding: 0.95rem 1.4rem;
+    background: rgba(253,246,238,0.06);
+    border: 1px solid rgba(253,246,238,0.12);
+    border-radius: 50px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 400;
+    color: var(--cream);
+    outline: none;
+    transition: all 0.3s;
+  }
+  .waitlist-form input[type="email"]::placeholder {
+    color: rgba(253,246,238,0.35);
+  }
+  .waitlist-form input[type="email"]:focus {
+    border-color: var(--orange);
+    background: rgba(253,246,238,0.09);
+    box-shadow: 0 0 20px rgba(255,148,8,0.1);
+  }
+  .waitlist-form .btn-primary {
+    white-space: nowrap;
+  }
+  .waitlist-success {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.5rem;
+    background: rgba(255,148,8,0.08);
+    border: 1px solid rgba(255,148,8,0.2);
+    border-radius: 50px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--orange);
+    animation: fadeUp 0.5s ease-out;
+  }
+  .waitlist-success.show { display: flex; }
+  .waitlist-error {
+    display: none;
+    font-size: 0.8rem;
+    color: #ff6b6b;
+    margin-top: 0.5rem;
+    text-align: center;
+    width: 100%;
+  }
+  .waitlist-error.show { display: block; }
+  .waitlist-form button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
   /* Grain overlay */
   body::before {
     content: '';
@@ -821,7 +886,7 @@
     <li><a href="#pillars">Why Stringz</a></li>
     <li><a href="#story">Our Story</a></li>
   </ul>
-  <a href="#cta" class="nav-cta">Join the Waitlist</a>
+  <a href="#" class="nav-cta" onclick="event.preventDefault();document.getElementById('heroEmail').focus();window.scrollTo({top:0,behavior:'smooth'});">Join the Waitlist</a>
   <button class="nav-toggle" aria-label="Toggle menu">
     <span></span><span></span><span></span>
   </button>
@@ -847,8 +912,14 @@
       Stringz skips the "talking phase" and gets straight to the point. We connect you with singles at the events and communities you already show up for. No more endless messaging, zero ghosting, and no more awkward planning.
     </p>
     <div class="hero-actions">
-      <a href="#cta" class="btn-primary">Join the Waitlist</a>
-      <a href="#how" class="btn-secondary">Learn More</a>
+      <div id="heroWaitlist">
+        <div class="waitlist-form" id="heroForm">
+          <input type="email" id="heroEmail" placeholder="Enter your email" required>
+          <button type="button" class="btn-primary" onclick="submitWaitlist('heroEmail', 'heroForm', 'heroSuccess', 'heroError')">Join the Waitlist</button>
+        </div>
+        <div class="waitlist-success" id="heroSuccess">&#10003; You're on the list! We'll be in touch.</div>
+        <div class="waitlist-error" id="heroError"></div>
+      </div>
     </div>
   </div>
 
@@ -1042,8 +1113,15 @@
     <p class="cta-sub reveal reveal-d2">
       No awkward "singles nights." No cold intros. Just real people in real places. Join the new standard for meeting in your city.
     </p>
-    <div class="reveal reveal-d3" style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;">
-      <a href="#" class="btn-primary" style="font-size:1.05rem;padding:1.05rem 2.8rem;">Join the Waitlist</a>
+    <div class="reveal reveal-d3">
+      <div id="ctaWaitlist">
+        <div class="waitlist-form" id="ctaForm">
+          <input type="email" id="ctaEmail" placeholder="Enter your email" required>
+          <button type="button" class="btn-primary" style="font-size:1.05rem;padding:1.05rem 2.4rem;" onclick="submitWaitlist('ctaEmail', 'ctaForm', 'ctaSuccess', 'ctaError')">Join the Waitlist</button>
+        </div>
+        <div class="waitlist-success" id="ctaSuccess">&#10003; You're on the list! We'll be in touch.</div>
+        <div class="waitlist-error" id="ctaError"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -1068,6 +1146,66 @@
     &copy; 2026 Stringz Dating. All rights reserved.
   </div>
 </footer>
+
+<script>
+  // Supabase config
+  const SUPABASE_URL = 'https://nzrsgfokaiiyttcjodyk.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_8Wz_Jb1hrvyPO2mpaR1jxg_xa3McIJf';
+
+  async function submitWaitlist(emailId, formId, successId, errorId) {
+    const emailInput = document.getElementById(emailId);
+    const form = document.getElementById(formId);
+    const success = document.getElementById(successId);
+    const error = document.getElementById(errorId);
+    const btn = form.querySelector('button');
+    const email = emailInput.value.trim();
+
+    // Reset error
+    error.classList.remove('show');
+    error.textContent = '';
+
+    // Validate
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      error.textContent = 'Please enter a valid email address.';
+      error.classList.add('show');
+      return;
+    }
+
+    // Disable button
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/waitlist`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ email: email })
+      });
+
+      if (res.ok) {
+        form.style.display = 'none';
+        success.classList.add('show');
+      } else if (res.status === 409 || res.status === 400) {
+        error.textContent = 'This email is already on the waitlist!';
+        error.classList.add('show');
+        btn.disabled = false;
+        btn.textContent = 'Join the Waitlist';
+      } else {
+        throw new Error('Server error');
+      }
+    } catch (err) {
+      error.textContent = 'Something went wrong. Please try again.';
+      error.classList.add('show');
+      btn.disabled = false;
+      btn.textContent = 'Join the Waitlist';
+    }
+  }
+</script>
 
 <script>
   // Nav scroll
