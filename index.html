@@ -43,37 +43,41 @@
   /* Waitlist form */
   .waitlist-form {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    max-width: 440px;
+    flex-direction: column;
+    gap: 0.65rem;
+    max-width: 480px;
     margin: 0 auto;
-    flex-wrap: wrap;
-    justify-content: center;
+    width: 100%;
   }
-  .waitlist-form input[type="email"] {
+  .waitlist-row {
+    display: flex;
+    gap: 0.65rem;
+  }
+  .waitlist-form input {
     flex: 1;
-    min-width: 220px;
-    padding: 0.95rem 1.4rem;
+    min-width: 0;
+    padding: 0.85rem 1.2rem;
     background: rgba(253,246,238,0.06);
     border: 1px solid rgba(253,246,238,0.12);
-    border-radius: 50px;
+    border-radius: 14px;
     font-family: 'Inter', sans-serif;
-    font-size: 0.92rem;
+    font-size: 0.88rem;
     font-weight: 400;
     color: var(--cream);
     outline: none;
     transition: all 0.3s;
   }
-  .waitlist-form input[type="email"]::placeholder {
+  .waitlist-form input::placeholder {
     color: rgba(253,246,238,0.35);
   }
-  .waitlist-form input[type="email"]:focus {
+  .waitlist-form input:focus {
     border-color: var(--orange);
     background: rgba(253,246,238,0.09);
     box-shadow: 0 0 20px rgba(255,148,8,0.1);
   }
   .waitlist-form .btn-primary {
-    white-space: nowrap;
+    width: 100%;
+    text-align: center;
   }
   .waitlist-success {
     display: none;
@@ -83,7 +87,7 @@
     padding: 0.85rem 1.5rem;
     background: rgba(255,148,8,0.08);
     border: 1px solid rgba(255,148,8,0.2);
-    border-radius: 50px;
+    border-radius: 14px;
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 600;
     font-size: 0.9rem;
@@ -95,7 +99,7 @@
     display: none;
     font-size: 0.8rem;
     color: #ff6b6b;
-    margin-top: 0.5rem;
+    margin-top: 0.25rem;
     text-align: center;
     width: 100%;
   }
@@ -103,6 +107,9 @@
   .waitlist-form button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+  }
+  @media (max-width: 600px) {
+    .waitlist-row { flex-direction: column; }
   }
 
   /* Grain overlay */
@@ -914,8 +921,13 @@
     <div class="hero-actions">
       <div id="heroWaitlist">
         <div class="waitlist-form" id="heroForm">
-          <input type="email" id="heroEmail" placeholder="Enter your email" required>
-          <button type="button" class="btn-primary" onclick="submitWaitlist('heroEmail', 'heroForm', 'heroSuccess', 'heroError')">Join the Waitlist</button>
+          <div class="waitlist-row">
+            <input type="text" id="heroFirst" placeholder="First Name" required>
+            <input type="text" id="heroLast" placeholder="Last Name" required>
+          </div>
+          <input type="email" id="heroEmail" placeholder="Email Address" required>
+          <input type="text" id="heroLocation" placeholder="City, State" required>
+          <button type="button" class="btn-primary" onclick="submitWaitlist('hero')">Join the Waitlist</button>
         </div>
         <div class="waitlist-success" id="heroSuccess">&#10003; You're on the list! We'll be in touch.</div>
         <div class="waitlist-error" id="heroError"></div>
@@ -1116,8 +1128,13 @@
     <div class="reveal reveal-d3">
       <div id="ctaWaitlist">
         <div class="waitlist-form" id="ctaForm">
-          <input type="email" id="ctaEmail" placeholder="Enter your email" required>
-          <button type="button" class="btn-primary" style="font-size:1.05rem;padding:1.05rem 2.4rem;" onclick="submitWaitlist('ctaEmail', 'ctaForm', 'ctaSuccess', 'ctaError')">Join the Waitlist</button>
+          <div class="waitlist-row">
+            <input type="text" id="ctaFirst" placeholder="First Name" required>
+            <input type="text" id="ctaLast" placeholder="Last Name" required>
+          </div>
+          <input type="email" id="ctaEmail" placeholder="Email Address" required>
+          <input type="text" id="ctaLocation" placeholder="City, State" required>
+          <button type="button" class="btn-primary" style="font-size:1.05rem;padding:1.05rem 2.4rem;" onclick="submitWaitlist('cta')">Join the Waitlist</button>
         </div>
         <div class="waitlist-success" id="ctaSuccess">&#10003; You're on the list! We'll be in touch.</div>
         <div class="waitlist-error" id="ctaError"></div>
@@ -1152,20 +1169,28 @@
   const SUPABASE_URL = 'https://nzrsgfokaiiyttcjodyk.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_8Wz_Jb1hrvyPO2mpaR1jxg_xa3McIJf';
 
-  async function submitWaitlist(emailId, formId, successId, errorId) {
-    const emailInput = document.getElementById(emailId);
-    const form = document.getElementById(formId);
-    const success = document.getElementById(successId);
-    const error = document.getElementById(errorId);
+  async function submitWaitlist(prefix) {
+    const form = document.getElementById(prefix + 'Form');
+    const success = document.getElementById(prefix + 'Success');
+    const error = document.getElementById(prefix + 'Error');
     const btn = form.querySelector('button');
-    const email = emailInput.value.trim();
+
+    const firstName = document.getElementById(prefix + 'First').value.trim();
+    const lastName = document.getElementById(prefix + 'Last').value.trim();
+    const email = document.getElementById(prefix + 'Email').value.trim();
+    const location = document.getElementById(prefix + 'Location').value.trim();
 
     // Reset error
     error.classList.remove('show');
     error.textContent = '';
 
     // Validate
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!firstName || !lastName || !email || !location) {
+      error.textContent = 'Please fill in all fields.';
+      error.classList.add('show');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       error.textContent = 'Please enter a valid email address.';
       error.classList.add('show');
       return;
@@ -1184,7 +1209,12 @@
           'Authorization': `Bearer ${SUPABASE_KEY}`,
           'Prefer': 'return=minimal'
         },
-        body: JSON.stringify({ email: email })
+        body: JSON.stringify({
+          first_name: firstName,
+          last_name: lastName,
+          email: email,
+          location: location
+        })
       });
 
       if (res.ok) {
