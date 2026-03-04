@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stringz Dating — Meet Where Life Is Happening</title>
+<title>Stringz Dating — Stop Swiping. Start Showing Up.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playwrite+NZ:wght@100..400&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -771,6 +771,63 @@
     font-style: italic;
   }
 
+  /* ========== CITY TEASER ========== */
+  .city-teaser-section {
+    background: radial-gradient(ellipse 50% 40% at 50% 30%, rgba(255,148,8,0.04), transparent);
+  }
+  .city-cards {
+    display: flex;
+    justify-content: center;
+    gap: 1.25rem;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+  }
+  .city-card {
+    padding: 1.75rem 2rem;
+    border-radius: 18px;
+    background: rgba(253,246,238,0.025);
+    border: 1px solid rgba(253,246,238,0.05);
+    text-align: center;
+    min-width: 200px;
+    flex: 1;
+    max-width: 260px;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+  .city-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--orange), var(--deep-wine), transparent);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .city-card:hover { background: rgba(253,246,238,0.04); border-color: rgba(255,148,8,0.1); transform: translateY(-4px); }
+  .city-card:hover::before { opacity: 1; }
+  .city-card-count {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, var(--orange), var(--deep-wine));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 0.6rem;
+  }
+  .city-card-label {
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+  .city-card-label strong {
+    color: var(--cream);
+    font-weight: 500;
+  }
+
   /* ========== CTA ========== */
   .cta-section { text-align: center; overflow: hidden; }
   .cta-bg {
@@ -893,7 +950,7 @@
     <li><a href="#pillars">Why Stringz</a></li>
     <li><a href="#story">Our Story</a></li>
   </ul>
-  <a href="#" class="nav-cta" onclick="event.preventDefault();document.getElementById('heroEmail').focus();window.scrollTo({top:0,behavior:'smooth'});">Join the Waitlist</a>
+  <a href="#" class="nav-cta" onclick="event.preventDefault();document.getElementById('heroEmail').focus();window.scrollTo({top:0,behavior:'smooth'});">Get Early Access</a>
   <button class="nav-toggle" aria-label="Toggle menu">
     <span></span><span></span><span></span>
   </button>
@@ -913,10 +970,10 @@
       <span class="dot"></span>
       Now accepting early access
     </div>
-    <h2 class="hero-script">Dating went digital.</h2>
-    <h1 class="hero-headline">We're bringing it<br>back to life.</h1>
+    <h2 class="hero-script">Stop Swiping.</h2>
+    <h1 class="hero-headline">Start Showing Up.</h1>
     <p class="hero-sub">
-      Stringz skips the "talking phase" and gets straight to the point. We connect you with singles at the events and communities you already show up for. No more endless messaging, zero ghosting, and no more awkward planning.
+      The first dating platform designed to get you off your phone. Match with singles at the events and venues you already love.
     </p>
     <div class="hero-actions">
       <div id="heroWaitlist">
@@ -927,9 +984,9 @@
           </div>
           <input type="email" id="heroEmail" placeholder="Email Address" required>
           <input type="text" id="heroLocation" placeholder="City, State" required>
-          <button type="button" class="btn-primary" onclick="submitWaitlist('hero')">Join the Waitlist</button>
+          <button type="button" class="btn-primary" onclick="submitWaitlist('hero')">Get Early Access to Your City</button>
         </div>
-        <div class="waitlist-success" id="heroSuccess">&#10003; You're on the list! We'll be in touch.</div>
+        <div class="waitlist-success" id="heroSuccess">&#10003; You're in! We'll let you know when Stringz hits your city.</div>
         <div class="waitlist-error" id="heroError"></div>
       </div>
     </div>
@@ -952,13 +1009,13 @@
 <!-- HOW IT WORKS -->
 <section class="how-section" id="how">
   <div class="section-inner">
-    <div class="section-label reveal">How It Works</div>
+    <div class="section-label reveal">The Problem</div>
     <h2 class="section-heading reveal reveal-d1">
-      Built for <span class="accent">encounters</span>,<br>not just engagement.
+      Real Chemistry Happens<br><span class="accent">in Real Life.</span>
     </h2>
     <div class="section-body reveal reveal-d2">
-      <p>Traditional apps are designed to keep you on your phone. Stringz is designed to get you off it. Whether it's a festival, a local market, or a rooftop show, we show you who's there and interested.</p>
-      <p>By matching your digital discovery with your physical environment, we kill the friction of cold approaches and forced mixers. We handle the context; you bring the chemistry.</p>
+      <p>You're tired of the "talking phase" that leads nowhere. Stringz skips the endless messaging and gets you straight to the encounter. We connect you with singles at the festivals, markets, and events you're already attending.</p>
+      <p>No ghosting, no "what should we do?" texts — just real people, in context.</p>
     </div>
 
     <div class="how-grid">
@@ -966,22 +1023,22 @@
         <div class="step reveal">
           <div class="step-num">1</div>
           <div class="step-content">
-            <h4>Discover real events</h4>
-            <p>See what's happening near you — festivals, rooftop shows, local markets, fitness meetups — and who's going.</p>
+            <h4>Discover what's happening</h4>
+            <p>See real events near you — rooftop shows, local galleries, fitness meetups, night markets — and who's going.</p>
           </div>
         </div>
         <div class="step reveal reveal-d1">
           <div class="step-num">2</div>
           <div class="step-content">
-            <h4>See who's interested</h4>
-            <p>Browse singles attending the same events. No blind swiping — you already share context and a reason to connect.</p>
+            <h4>See who's open to meeting</h4>
+            <p>No blind swiping. Browse event-goers who share your context. You already have a reason to connect.</p>
           </div>
         </div>
         <div class="step reveal reveal-d2">
           <div class="step-num">3</div>
           <div class="step-content">
-            <h4>Thread connected</h4>
-            <p>When interest is mutual, a thread opens. You're already going to the same place — chemistry works better in context.</p>
+            <h4>Show up and connect</h4>
+            <p>When interest is mutual, a thread opens. You don't have to "go on a date" — you just show up where you were already going.</p>
           </div>
         </div>
       </div>
@@ -1044,43 +1101,43 @@
   <div class="section-inner">
     <div class="section-label reveal">Why Stringz</div>
     <h2 class="section-heading reveal reveal-d1">
-      Stop swiping from your couch.<br><span class="accent">Start showing up.</span>
+      Built for Encounters,<br><span class="accent">Not Just Engagement.</span>
     </h2>
     <div class="section-body reveal reveal-d2">
-      <p>Swiping is passive. Messaging is exhausting. Planning dates with strangers is awkward. Stringz connects you to people already sharing your environment.</p>
+      <p>Traditional apps are designed to keep you scrolling. Stringz is designed to get you out the door. Whether it's a rooftop show or a local gallery, we show you who's there and interested. We provide the context; you bring the chemistry.</p>
     </div>
 
     <div class="pillars-grid">
       <div class="pillar reveal">
-        <div class="pillar-icon">&#128293;</div>
-        <h3>Connection</h3>
-        <p>Meet through shared experiences, not curated profiles. Context creates chemistry that algorithms can't replicate.</p>
+        <div class="pillar-icon">&#9889;</div>
+        <h3>Electric</h3>
+        <p>Capture the spark of meeting in person. No screen can replicate the energy of locking eyes across a rooftop show.</p>
       </div>
       <div class="pillar reveal reveal-d1">
-        <div class="pillar-icon">&#9889;</div>
-        <h3>Serendipity</h3>
-        <p>The best connections happen when you least expect them. We create the conditions; life does the rest.</p>
+        <div class="pillar-icon">&#127919;</div>
+        <h3>Intentional</h3>
+        <p>No mindless swiping. Every connection on Stringz leads to an encounter — a real moment, in a real place.</p>
       </div>
       <div class="pillar reveal reveal-d2">
-        <div class="pillar-icon">&#127769;</div>
-        <h3>Energy</h3>
-        <p>No more dead DMs. Match the energy of real-world encounters where people are present, engaged, and open.</p>
+        <div class="pillar-icon">&#128275;</div>
+        <h3>Low-Friction</h3>
+        <p>We remove the hurdles — the endless messaging, the awkward planning, the ghosting. You just show up.</p>
       </div>
       <div class="pillar reveal reveal-d3">
         <div class="pillar-icon">&#127961;</div>
-        <h3>Urban</h3>
-        <p>Built for the cities where culture thrives. Tap into your city's nightlife, markets, shows, and communities.</p>
+        <h3>Contextual</h3>
+        <p>You're not meeting a stranger from the internet. You're meeting someone who loves the same scene you do.</p>
       </div>
     </div>
 
     <div class="energy-tags reveal reveal-d4">
-      <span class="energy-tag">Connection</span>
-      <span class="energy-tag">Chemistry</span>
-      <span class="energy-tag">Serendipity</span>
-      <span class="energy-tag">Energy</span>
-      <span class="energy-tag">Urban</span>
-      <span class="energy-tag">Nightlife</span>
-      <span class="energy-tag">Movement</span>
+      <span class="energy-tag">Encounter Engine</span>
+      <span class="energy-tag">Showing Up</span>
+      <span class="energy-tag">Real-Life Chemistry</span>
+      <span class="energy-tag">Connecting in Context</span>
+      <span class="energy-tag">Community Members</span>
+      <span class="energy-tag">Event-Goers</span>
+      <span class="energy-tag">Discovery Layer</span>
     </div>
   </div>
 </section>
@@ -1092,20 +1149,20 @@
   <div class="section-inner">
     <div class="section-label reveal">Our Story</div>
     <h2 class="section-heading reveal reveal-d1">
-      Connection works better<br><span class="accent">in context.</span>
+      We built the app<br><span class="accent">we wished existed.</span>
     </h2>
 
     <div class="story-layout">
       <div class="section-body reveal reveal-d2">
-        <p>Stringz started as a simple experiment — connecting strangers attending the same event through a group chat. When that experiment turned into a real relationship, it revealed something the dating industry had forgotten: the best connections happen through the things we already love doing.</p>
-        <p>While dating apps optimized for the swipe, we optimized for the encounter.</p>
-        <p>Stringz bridges the gap between digital discovery and real-life chemistry by connecting singles within the same communities, events, and environments.</p>
-        <p style="color:var(--cream);font-weight:400;">We aren't replacing the real world — we're just making it easier to navigate.</p>
+        <p>Stringz started as a simple experiment — connecting strangers attending the same event through a group chat. When that experiment turned into a real relationship, it revealed something the dating industry had forgotten.</p>
+        <p>The best connections happen through the things you already love doing.</p>
+        <p>While dating apps optimized for the swipe, we optimized for the encounter. Stringz bridges the gap between digital discovery and real-life chemistry by connecting singles within the same communities, events, and environments.</p>
+        <p style="color:var(--cream);font-weight:400;">We're not replacing the real world — we're just making it easier to navigate.</p>
       </div>
 
       <div class="story-quote reveal reveal-d3">
         <blockquote>
-          "Dating apps optimize for attention. Stringz optimizes for encounters. We handle the context; you bring the chemistry."
+          "You don't have to 'go on a date.' You just show up where you were already going — and know who's open to meeting you there."
         </blockquote>
       </div>
     </div>
@@ -1114,16 +1171,43 @@
 
 <div class="section-divider"></div>
 
-<!-- CTA -->
+<!-- LIVE CITY TEASER -->
+<section class="city-teaser-section">
+  <div class="section-inner" style="text-align:center;">
+    <div class="section-label reveal" style="justify-content:center;">What's Happening</div>
+    <h2 class="section-heading reveal reveal-d1" style="text-align:center;">
+      See who's showing up<br><span class="accent">in your city tonight.</span>
+    </h2>
+    <div class="city-cards reveal reveal-d2">
+      <div class="city-card">
+        <div class="city-card-count">42</div>
+        <div class="city-card-label">event-goers at<br><strong>Jazz Cafe, London</strong></div>
+      </div>
+      <div class="city-card">
+        <div class="city-card-count">87</div>
+        <div class="city-card-label">event-goers at<br><strong>Brooklyn Night Market</strong></div>
+      </div>
+      <div class="city-card">
+        <div class="city-card-count">31</div>
+        <div class="city-card-label">event-goers at<br><strong>Rooftop Cinema, LA</strong></div>
+      </div>
+    </div>
+    <p class="reveal reveal-d3" style="font-size:0.85rem;color:var(--text-secondary);margin-top:1.5rem;font-weight:300;">
+      Live event data coming soon. Get early access to be the first to see who's where.
+    </p>
+  </div>
+</section>
+
+<div class="section-divider"></div>
 <section class="cta-section" id="cta">
   <div class="cta-bg"></div>
   <div class="cta-content">
     <div class="section-label reveal" style="justify-content:center;">Ready?</div>
     <h2 class="cta-heading reveal reveal-d1">
-      Ready to meet<br><span class="accent">differently?</span>
+      Your city is waiting.<br><span class="accent">Are you showing up?</span>
     </h2>
     <p class="cta-sub reveal reveal-d2">
-      No awkward "singles nights." No cold intros. Just real people in real places. Join the new standard for meeting in your city.
+      No awkward "singles nights." No cold intros. Just real people at real events. Get early access and be the first to connect in your city.
     </p>
     <div class="reveal reveal-d3">
       <div id="ctaWaitlist">
@@ -1134,9 +1218,9 @@
           </div>
           <input type="email" id="ctaEmail" placeholder="Email Address" required>
           <input type="text" id="ctaLocation" placeholder="City, State" required>
-          <button type="button" class="btn-primary" style="font-size:1.05rem;padding:1.05rem 2.4rem;" onclick="submitWaitlist('cta')">Join the Waitlist</button>
+          <button type="button" class="btn-primary" style="font-size:1.05rem;padding:1.05rem 2.4rem;" onclick="submitWaitlist('cta')">Get Early Access to Your City</button>
         </div>
-        <div class="waitlist-success" id="ctaSuccess">&#10003; You're on the list! We'll be in touch.</div>
+        <div class="waitlist-success" id="ctaSuccess">&#10003; You're in! We'll let you know when Stringz hits your city.</div>
         <div class="waitlist-error" id="ctaError"></div>
       </div>
     </div>
@@ -1150,7 +1234,7 @@
       <div class="footer-brand">
         <span class="footer-brand-text">Stringz Dating</span>
       </div>
-      <p class="footer-tagline">Meet where life is happening.</p>
+      <p class="footer-tagline">Stop swiping. Start showing up.</p>
     </div>
     <div class="footer-links">
       <a href="#">About</a>
@@ -1224,7 +1308,7 @@
         error.textContent = 'This email is already on the waitlist!';
         error.classList.add('show');
         btn.disabled = false;
-        btn.textContent = 'Join the Waitlist';
+        btn.textContent = 'Get Early Access to Your City';
       } else {
         throw new Error('Server error');
       }
@@ -1232,7 +1316,7 @@
       error.textContent = 'Something went wrong. Please try again.';
       error.classList.add('show');
       btn.disabled = false;
-      btn.textContent = 'Join the Waitlist';
+      btn.textContent = 'Get Early Access to Your City';
     }
   }
 </script>
